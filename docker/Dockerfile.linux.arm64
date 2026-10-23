@@ -1,7 +1,7 @@
-FROM alpine:3.6 as alpine
-RUN apk add -U --no-cache ca-certificates
+FROM harness0.harness.io/oci/docker_artifacts/hhi/harnessos-alpine:1 AS alpine
+RUN apk add -U --no-cache 'ca-certificates>=20261020-r0'
 
-FROM alpine:3.6
+FROM harness0.harness.io/oci/docker_artifacts/hhi/harnessos-alpine:1
 ENV GODEBUG netdns=go
 
 COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
