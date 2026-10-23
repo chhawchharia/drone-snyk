@@ -5,8 +5,8 @@ FROM harness0.harness.io/oci/docker_artifacts/hhi/harnessos-alpine:1 AS alpine
 RUN apk add -U --no-cache 'ca-certificates>=20261020-r0'
 
 FROM docker:20.10.12-dind
-COPY --from=hhi-ca-certificates /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
-
+COPY --from=hhi-ca-certificates /etc/ssl/certs/ca-certificates.crt /etc/hhi/certs/ca-certificates.crt
+ENV SSL_CERT_FILE=/etc/hhi/certs/ca-certificates.crt SSL_CERT_DIR=/etc/hhi/certs
 RUN apk --update add \
     curl
 
@@ -22,3 +22,4 @@ COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 ADD release/linux/amd64/plugin /bin/
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh", "/bin/plugin"]
+COPY --from=hhi-ca-certificates /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt

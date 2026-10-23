@@ -1,10 +1,17 @@
+FROM alpine:3.24 AS patched-arm-certificates
+RUN apk add --no-cache 'ca-certificates>=20261020-r0'
+
 FROM alpine:3.24 AS alpine
 RUN apk add -U --no-cache 'ca-certificates>=20261020-r0'
 
-FROM alpine:3.24
+FROM alpine:3.6
+COPY --from=patched-arm-certificates /etc/ssl/certs/ca-certificates.crt /etc/patched-ca/certs/ca-certificates.crt
+ENV SSL_CERT_FILE=/etc/patched-ca/certs/ca-certificates.crt SSL_CERT_DIR=/etc/patched-ca/certs
 ENV GODEBUG netdns=go
 
 COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 ADD release/linux/arm/plugin /bin/
 ENTRYPOINT ["/bin/plugin"]
+# CA bundles are architecture-independent; use the patched HHI roots on legacy ARM.
+COPY --from=patched-arm-certificates /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
