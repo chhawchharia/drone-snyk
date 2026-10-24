@@ -1,10 +1,10 @@
-FROM alpine:3.24 AS patched-arm-certificates
+FROM alpine:3.24@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a AS patched-arm-certificates
 RUN apk add --no-cache 'ca-certificates>=20261020-r0'
 
-FROM alpine:3.24 AS alpine
+FROM alpine:3.24@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a AS alpine
 RUN apk add -U --no-cache 'ca-certificates>=20261020-r0'
 
-FROM alpine:3.6
+FROM alpine:3.6@sha256:66790a2b79e1ea3e1dabac43990c54aca5d1ddf268d9a5a0285e4167c8b24475
 COPY --from=patched-arm-certificates /etc/ssl/certs/ca-certificates.crt /etc/patched-ca/certs/ca-certificates.crt
 ENV SSL_CERT_FILE=/etc/patched-ca/certs/ca-certificates.crt SSL_CERT_DIR=/etc/patched-ca/certs
 ENV GODEBUG netdns=go
