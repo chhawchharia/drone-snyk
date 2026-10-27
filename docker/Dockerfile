@@ -15,6 +15,8 @@ ENV GODEBUG netdns=go
 ENV DOCKER_HOST=unix:///var/run/docker.sock
 
 COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+# Go also loads every file in /etc/ssl/certs; drop the old per-root links so only the patched bundle is trusted
+RUN find /etc/ssl/certs -mindepth 1 ! -name ca-certificates.crt -delete
 
 ADD release/linux/amd64/plugin /bin/
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh", "/bin/plugin"]
