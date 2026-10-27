@@ -13,8 +13,6 @@ steps:
 - name: publish
   image: plugins/docker
   settings:
-    pull_image: true
-    no_cache: true
     repo: plugins/drone-snyk
     auto_tag: true
     dockerfile: docker/Dockerfile

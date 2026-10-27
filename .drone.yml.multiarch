@@ -15,8 +15,6 @@ steps:
 - name: publish
   image: plugins/docker
   settings:
-    pull_image: true
-    no_cache: true
     repo: drone-plugins/drone-snyk
     auto_tag: true
     auto_tag_suffix: linux-amd64
@@ -29,8 +27,6 @@ steps:
 - name: publish_arm
   image: plugins/docker
   settings:
-    pull_image: true
-    no_cache: true
     repo: drone-plugins/drone-snyk
     auto_tag: true
     auto_tag_suffix: linux-arm
@@ -43,8 +39,6 @@ steps:
 - name: publish_arm
   image: plugins/docker
   settings:
-    pull_image: true
-    no_cache: true
     repo: drone-plugins/drone-snyk
     auto_tag: true
     auto_tag_suffix: linux-arm64
